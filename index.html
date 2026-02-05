@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.3">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000; min-height: 14.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html lang="en"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;meta charset="UTF-8"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;title&gt;School Countdown&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1">&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>body {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>font-family: Arial, sans-serif;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>text-align: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>background: #111;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>color: #fff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>padding: 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>#label {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>font-size: 16px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>opacity: 0.8;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>#timer {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>font-size: 36px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>font-weight: bold;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>margin-top: 10px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1">&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;div id="label"&gt;Loading...&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1">&lt;div id="timer"&gt;&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;script&gt;</span></p>
+<p class="p1"><span class="s1">// =======================</span></p>
+<p class="p1"><span class="s1">// CONFIGURATION</span></p>
+<p class="p1"><span class="s1">// =======================</span></p>
+<p class="p1"><span class="s1">const MANUAL_NO_SCHOOL = false; // set to true to manually show "No School"</span></p>
+<p class="p1"><span class="s1">const events = [</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"07:50", // Auditorium → Dismissal</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"07:55", // Dismissal → 1st</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"08:00", // 1st Period start</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"08:50", // 1st Period end → Class change</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"08:55", // 2nd Period start</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"09:45", // 2nd end → Class change</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"09:50", // 3rd start</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"10:40", // 3rd end → Class change</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"10:45", // 4th Pt.1 start</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"11:25", // 4th Pt.1 end → Lunch</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"11:50", // 4th Pt.2 start</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"12:25", // 4th Pt.2 end → Class change</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"12:30", // 5th start</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"13:20", // 5th end → Class change</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"13:25", // 6th start</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"14:15", // 6th end → Class change</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"14:20", // 7th start</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"15:10"<span class="Apple-converted-space">  </span>// 7th end → School ends</span></p>
+<p class="p1"><span class="s1">];</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">// =======================</span></p>
+<p class="p1"><span class="s1">// FUNCTIONS</span></p>
+<p class="p1"><span class="s1">// =======================</span></p>
+<p class="p1"><span class="s1">function updateCountdown() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const now = new Date();</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>// MANUAL OVERRIDE</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (MANUAL_NO_SCHOOL) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>document.getElementById('label').textContent = "No School";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>document.getElementById('timer').textContent = "";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const day = now.getDay(); // 0=Sun, 6=Sat</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (day === 0 || day === 6) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>document.getElementById('label').textContent = "Weekend";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>document.getElementById('timer').textContent = "";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>// Find next event</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>let nextEvent = null;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>for (let time of events) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const [h, m] = time.split(":").map(Number);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const eventTime = new Date(now);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>eventTime.setHours(h, m, 0, 0);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>if (eventTime &gt; now) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>nextEvent = eventTime;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>break;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (!nextEvent) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>document.getElementById('label').textContent = "School has ended.";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>document.getElementById('timer').textContent = "";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>// Countdown</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const diff = nextEvent - now;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const mins = Math.floor(diff / 60000);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const secs = Math.floor((diff % 60000) / 1000);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('label').textContent = "Next class change / period start in";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById('timer').textContent = `${mins}:${secs.toString().padStart(2,"0")}`;</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">// =======================</span></p>
+<p class="p1"><span class="s1">// INIT</span></p>
+<p class="p1"><span class="s1">// =======================</span></p>
+<p class="p1"><span class="s1">updateCountdown();</span></p>
+<p class="p1"><span class="s1">setInterval(updateCountdown, 1000);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;/script&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>
