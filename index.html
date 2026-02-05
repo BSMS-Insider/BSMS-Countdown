@@ -5,20 +5,21 @@
 <title>School Countdown</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
     text-align: center;
-    background: #111;
+    background: transparent;
     color: #fff;
-    padding: 20px;
+    margin: 0;
+    padding: 10px;
   }
   #label {
     font-size: 16px;
-    opacity: 0.8;
+    opacity: 0.85;
   }
   #timer {
     font-size: 36px;
     font-weight: bold;
-    margin-top: 10px;
+    margin-top: 5px;
   }
 </style>
 </head>
@@ -61,21 +62,18 @@ function updateCountdown() {
     return;
   }
   let current = null;
-  let next = null;
   for (let i = 0; i < schedule.length; i++) {
     const [sh, sm] = schedule[i].start.split(":").map(Number);
     const [eh, em] = schedule[i].end.split(":").map(Number);
     const startTime = new Date(now); startTime.setHours(sh, sm, 0, 0);
     const endTime = new Date(now); endTime.setHours(eh, em, 0, 0);
     if (now >= startTime && now < endTime) current = schedule[i];
-    if (now < startTime && !next) next = schedule[i];
   }
-  if (!current && !next) {
+  if (!current) {
     document.getElementById('label').textContent = "School has ended.";
     document.getElementById('timer').textContent = "";
     return;
   }
-  if (!current && next) current = {name:"Before School", end:next.start};
   const [eh, em] = current.end.split(":").map(Number);
   const endTime = new Date(now); endTime.setHours(eh, em, 0, 0);
   const diff = endTime - now;
